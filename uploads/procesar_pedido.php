@@ -105,10 +105,10 @@ for ($i = 0; $i < count($productos); $i++) {
 
     $cuerpoCli .= "- $nombre: $cant x $" . number_format($precio, 0, ',', '.') . " = $" . number_format($subtotal, 0, ',', '.') . "\n";
 
-    // Suma al total
+   
     $total += $subtotal;
 
-    // Insertar detalle
+    
     $ins = $conn->prepare(
       "INSERT INTO detalle_pedido
          (pedido_id, producto_id, cantidad, precio_unitario)

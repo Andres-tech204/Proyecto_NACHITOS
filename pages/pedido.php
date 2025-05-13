@@ -2,14 +2,12 @@
 session_start();
 include('../uploads/conexion.php');
 
-// Lógica antes de cualquier salida
 if (!isset($_SESSION["pedido"])) {
     $_SESSION["pedido"] = [];
 }
 
-// Obtener productos
 $productos = [];
-$sql = "SELECT producto_id, nombre_producto, precio FROM productos";  // Cambié "id" por "producto_id"
+$sql = "SELECT producto_id, nombre_producto, precio FROM productos";  
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -17,7 +15,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Agregar por POST
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar"])) {
     $id = intval($_POST["id"] ?? $_POST["producto_id"] ?? 0);
     $cantidad = intval($_POST["cantidad"] ?? 1);
@@ -30,28 +28,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar"])) {
     agregarProductoAPedido($conn, $id, $cantidad);
 }
 
-// Agregar por GET
+
 if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["producto_id"])) {
     $id = intval($_GET["producto_id"]);
     if ($id > 0) {
-        agregarProductoAPedido($conn, $id, 1); // cantidad 1 por defecto
+        agregarProductoAPedido($conn, $id, 1); 
     }
 }
 
-// Eliminar
 if (isset($_GET["eliminar"])) {
     $idEliminar = intval($_GET["eliminar"]);
     $_SESSION["pedido"] = array_filter($_SESSION["pedido"], function ($item) use ($idEliminar) {
-        return $item["producto_id"] != $idEliminar;  // Cambié "id" por "producto_id"
+        return $item["producto_id"] != $idEliminar;  
     });
-    $_SESSION["pedido"] = array_values($_SESSION["pedido"]);  // Reindexar el array después de eliminar
+    $_SESSION["pedido"] = array_values($_SESSION["pedido"]);  
     header("Location: pedido.php");
     exit;
 }
 
-// Función para agregar un producto al pedido
+
 function agregarProductoAPedido($conn, $id, $cantidad) {
-    $stmt = $conn->prepare("SELECT nombre_producto, precio FROM productos WHERE producto_id = ?");  // Cambié "id" por "producto_id"
+    $stmt = $conn->prepare("SELECT nombre_producto, precio FROM productos WHERE producto_id = ?");  
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -63,7 +60,7 @@ function agregarProductoAPedido($conn, $id, $cantidad) {
 
         $existe = false;
         foreach ($_SESSION["pedido"] as &$item) {
-            if ($item["producto_id"] == $id) {  // Cambié "id" por "producto_id"
+            if ($item["producto_id"] == $id) {  
                 $item["cantidad"] += $cantidad;
                 $existe = true;
                 break;
@@ -72,7 +69,7 @@ function agregarProductoAPedido($conn, $id, $cantidad) {
 
         if (!$existe) {
             $_SESSION["pedido"][] = [
-                "producto_id" => $id,  // Cambié "id_producto" por "producto_id"
+                "producto_id" => $id,  
                 "nombre_producto" => $nombre_producto,
                 "precio" => $precio,
                 "cantidad" => $cantidad
@@ -87,7 +84,6 @@ function agregarProductoAPedido($conn, $id, $cantidad) {
     }
 }
 
-// Ahora carga el header
 include('../includes/header.php');
 ?>
 
