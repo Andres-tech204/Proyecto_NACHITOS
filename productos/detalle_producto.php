@@ -7,7 +7,7 @@ if ($id_producto == 0) {
     echo "Producto no encontrado.";
     exit;
 }
-$sql = "SELECT * FROM productos WHERE id_producto = ?";
+$sql = "SELECT * FROM productos WHERE producto_id= ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_producto); 
 $stmt->execute();
@@ -36,7 +36,7 @@ if ($producto = $resultado->fetch_assoc()) {
 
         <form action="../pages/pedido.php" method="POST">
             <input type="hidden" name="agregar" value="1">
-            <input type="hidden" name="id" value="<?php echo $producto['id_producto']; ?>">
+            <input type="hidden" name="id" value="<?php echo $producto['producto_id']; ?>">
             <input type="hidden" name="nombre" value="<?php echo $producto['nombre']; ?>">
             <input type="hidden" name="precio" value="<?php echo $producto['precio']; ?>">
             <label>Cantidad: <input type="number" name="cantidad" value="1" min="1" max="<?php echo $producto['stock']; ?>"></label>

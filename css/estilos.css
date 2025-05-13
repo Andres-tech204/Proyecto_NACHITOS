@@ -174,7 +174,7 @@ footer.footerInferior {
 }
 body::before {
   content: "";
-  background-image: url('/imagenes/LogoNachitos.png'); 
+  background-image: url('../imagenes/LogoNachitos.png'); 
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -222,5 +222,75 @@ body::before {
   gap: 20px;
   justify-content: flex-start;
 }
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #f5f5f5;
+}
+
+.dark-mode .nav-container {
+  background-color: #333;
+}
+
+.dark-mode .productos-card {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+}
+
+.dark-mode .botones {
+  background-color: #444;
+  color: #fff;
+}
+
+.dark-mode .botones:hover {
+  background-color: #666;
+  color: #fff;
+}
+
+.dark-mode a {
+  color: #80dfff;
+}
+
+.dark-mode a:hover {
+  color: #fff;
+}
+
+.dark-mode footer.footerSuperior,
+.dark-mode footer.footerInferior {
+  background-color: #222;
+}
+
+.dark-mode .footernav1, 
+.dark-mode .footernav2 {
+  color: #f5f5f5;
+}
+
+.dark-mode .img-producto {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.botonEliminar {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.botonFinalizar {
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+
 
 

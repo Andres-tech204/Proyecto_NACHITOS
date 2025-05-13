@@ -1,10 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
-    header("Location: ../login/login.php");
-    exit;
-}
-
+include 'verificar_admin.php';
 include("../uploads/conexion.php");
 
 if (!isset($_GET['id'])) {
@@ -14,8 +9,8 @@ if (!isset($_GET['id'])) {
 
 $id_pedido = intval($_GET['id']);
 
-// Obtener info del pedido
-$sql_pedido = "SELECT * FROM pedidos WHERE id_pedido = $id_pedido";
+
+$sql_pedido = "SELECT * FROM pedidos WHERE pedido_id = $id_pedido";
 $resultado_pedido = $conn->query($sql_pedido);
 
 if ($resultado_pedido->num_rows === 0) {
@@ -25,11 +20,12 @@ if ($resultado_pedido->num_rows === 0) {
 
 $pedido = $resultado_pedido->fetch_assoc();
 
-// Obtener productos del pedido
-$sql_detalles = "SELECT dp.*, pr.nombre AS nombre_producto 
+
+$sql_detalles = "SELECT dp.*, pr.nombre_producto AS nombre_producto 
                  FROM detalle_pedido dp
-                 JOIN productos pr ON dp.id_producto = pr.id_producto
-                 WHERE dp.id_pedido = $id_pedido";
+                 JOIN productos pr ON dp.producto_id = pr.producto_id
+                 WHERE dp.pedido_id = $id_pedido";
+
 
 $detalles = $conn->query($sql_detalles);
 

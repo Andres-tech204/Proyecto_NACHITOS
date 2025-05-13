@@ -1,63 +1,70 @@
 <?php
-session_start();
-if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
-    header("Location: ../login/login.php");
-    exit;
-}
+include 'verificar_admin.php';
 
-include("../uploads/conexion.php");
+include('../uploads/conexion.php');
 
-// Consulta de pedidos
-$sql = "SELECT p.id_pedido, p.nombre, p.correo, p.telefono, p.fecha_pedido, p.estado
+$sql = "SELECT p.pedido_id, p.fecha_pedido, p.estado, p.total, u.nombre
         FROM pedidos p
+        JOIN usuarios u ON p.usuario_id = u.usuario_id
         ORDER BY p.fecha_pedido DESC";
 
-$resultado = $conn->query($sql);
-
-if (isset($_GET['msg']) && $_GET['msg'] === 'eliminado') {
-    echo "<p style='color: green;'>✅ Pedido eliminado correctamente.</p>";
-}
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Pedidos</title>
-    <link rel="stylesheet" href="../css/estilos.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Pedidos</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-    <h1>Pedidos Recibidos</h1>
-    <table border="1" cellpadding="10">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Detalle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($pedido = $resultado->fetch_assoc()): ?>
+    <header>
+        <h1>Listado de Pedidos</h1>
+        <nav>
+            <ul>
+                <li><a href="admin.php">Página Principal</a></li>
+                <li><a href="logout.php">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td><?= $pedido['id_pedido'] ?></td>
-                    <td><?= htmlspecialchars($pedido['nombre']) ?></td>
-                    <td><?= htmlspecialchars($pedido['correo']) ?></td>
-                    <td><?= htmlspecialchars($pedido['telefono']) ?></td>
-                    <td><?= $pedido['fecha_pedido'] ?></td>
-                    <td><?= ucfirst($pedido['estado']) ?></td>
-                    <td><a href="detalle_pedido.php?id=<?= $pedido['id_pedido'] ?>">Ver</a></td>
-                    <td>
-                        <a href="eliminar_pedido.php?id=<?= $pedido['id_pedido'] ?>"
-                          onclick="return confirm('¿Estas seguro de eliminar este pedido?');">Eliminar</a>
-                    <td>
+                    <th>ID Pedido</th>
+                    <th>Nombre Cliente</th>
+                    <th>Fecha Pedido</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endwhile; ?>
-            
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>" . $row['pedido_id'] . "</td>";
+                        echo "<td>" . $row['nombre'] . "</td>";
+                        echo "<td>" . $row['fecha_pedido'] . "</td>";
+                        echo "<td>" . $row['estado'] . "</td>";
+                        echo "<td>" . number_format($row['total'], 2) . "</td>";
+                        echo "<td><a href='detalle_pedido.php?id=" . $row['pedido_id'] . "'>Ver Detalles</a></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>No hay pedidos registrados.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </main>
 </body>
 </html>
+
+<?php
+mysqli_close($conn);
+?>

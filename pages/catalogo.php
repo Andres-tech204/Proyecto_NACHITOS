@@ -17,17 +17,24 @@ $resultado = $conn->query($sql);
   <main class="catalogo-contenedor">
     <h1>Nuestros Productos</h1>
     <div class="productos-grid">
-      <?php while ($producto = $resultado->fetch_assoc()): ?>
-        <div class="producto-card">
-          <img src="../imagenes/<?php echo $producto['imagen_url']; ?>" alt="<?php echo $producto['nombre']; ?>" class="img-producto">
-          <h2><?php echo $producto['nombre']; ?></h2>
-          <p>$<?php echo number_format($producto['precio'], 0, ',', '.'); ?> CLP</p>
-          <a href="../productos/detalle_producto.php?id=<?php echo $producto['id_producto']; ?>" class="boton-reservar">Ver más</a>
+      <?php while ($productos = $resultado->fetch_assoc()): ?>
+        <div class="productos-card">
+          <img src="../imagenes/<?php echo $productos['imagen_url']; ?>" alt="<?php echo $productos['nombre_producto']; ?>" class="img-producto">
+          <h2><?php echo $productos['nombre_producto']; ?></h2>
+          <p>$<?php echo number_format($productos['precio'], 0, ',', '.'); ?> CLP</p>
+
+      
+          <a href="../productos/detalle_producto.php?producto_id=<?php echo $productos['producto_id']; ?>" class="boton-reservar">Ver más</a>
+
+       
+          <a href="../pages/pedido.php?producto_id=<?php echo $productos['producto_id']; ?>" class="boton-reservar" style="margin-top: 5px; display: inline-block;">Pedir</a>
+
+  
           <form action="../pages/pedido.php" method="POST" style="margin-top: 10px;">
             <input type="hidden" name="agregar" value="1">
-            <input type="hidden" name="id" value="<?php echo $producto['id_producto']; ?>">
-            <input type="hidden" name="nombre" value="<?php echo $producto['nombre']; ?>">
-            <input type="hidden" name="precio" value="<?php echo $producto['precio']; ?>">
+            <input type="hidden" name="id" value="<?php echo $productos['producto_id']; ?>">
+            <input type="hidden" name="nombre" value="<?php echo $productos['nombre_producto']; ?>">
+            <input type="hidden" name="precio" value="<?php echo $productos['precio']; ?>">
             <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
             <button type="submit">Agregar a Cotización</button>
           </form>

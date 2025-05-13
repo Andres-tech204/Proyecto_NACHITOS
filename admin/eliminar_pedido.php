@@ -1,9 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
-    header("Location: ../login/login.php");
-    exit;
-}
+include 'verificar_admin.php';
 
 include("../uploads/conexion.php");
 

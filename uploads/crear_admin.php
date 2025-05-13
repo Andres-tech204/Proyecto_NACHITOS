@@ -9,11 +9,11 @@ $nombre = "Administrador";
 $correo = "administrador@nachitos.cl";
 $contrasena_plana = "admin123"; 
 $contrasena_hash = password_hash($contrasena_plana, PASSWORD_DEFAULT);
-$tipo_usuario = "admin";
+$perfil = "administrador";
 
-$sql = "INSERT INTO usuarios (nombre, correo, contrasena, tipo_usuario) VALUES (?, ?, ?, ?)";
+$sql = "INSERT INTO usuarios (nombre, correo_electronico, contrasena, perfil) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssss", $nombre, $correo, $contrasena_hash, $tipo_usuario);
+$stmt->bind_param("ssss", $nombre, $correo, $contrasena_hash, $perfil);
 
 if ($stmt->execute()) {
     echo "✅ Usuario administrador creado correctamente.";

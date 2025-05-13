@@ -6,23 +6,23 @@ $mensaje = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $correo = $_POST['correo'];
-    $contrasena = $_POST['contrasena']; // Este es el cambio
+    $contrasena = $_POST['contrasena']; 
 
-    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE correo = ?");
+    $stmt = $conn->prepare("SELECT * FROM usuarios WHERE correo_electronico = ?");
     $stmt->bind_param("s", $correo);
     $stmt->execute();
     $resultado = $stmt->get_result();
     $usuario = $resultado->fetch_assoc();
 
-    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) { // Cambié 'contraseña' por 'contrasena' aquí también
+    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) { 
         $_SESSION['id'] = $usuario['id_usuario'];
         $_SESSION['usuario'] = $usuario['nombre'];
-        $_SESSION['tipo_usuario'] = $usuario['tipo_usuario'];
+        $_SESSION['perfil'] = $usuario['perfil'];
 
-        if ($_SESSION['tipo_usuario'] === 'admin') {
+        if ($_SESSION['perfil'] === 'administrador') {
             header("Location: ../admin/admin.php");
         } else {
-            header("Location: ../pages/index.php");
+            header("Location: ../index.php");
         }
         exit();
     } else {

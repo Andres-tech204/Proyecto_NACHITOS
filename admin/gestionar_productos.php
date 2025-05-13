@@ -3,6 +3,8 @@ include '../uploads/conexion.php';
 
 $mensaje = '';
 
+include 'verificar_admin.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
