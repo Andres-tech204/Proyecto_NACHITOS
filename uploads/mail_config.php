@@ -6,6 +6,11 @@ require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 require 'PHPMailer/Exception.php';
 
+$smtp_host = 'smtp.gmail.com';
+$smtp_user = 'nachitosbot@gmail.com';
+$smtp_pass = 'uioy zxpk yabh klcq';
+$admin_email = 'nachitos@correo.cl';
+
 function enviarCorreo($para, $asunto, $cuerpo) {
     $mail = new PHPMailer(true);
     

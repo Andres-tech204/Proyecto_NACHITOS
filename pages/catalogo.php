@@ -1,8 +1,14 @@
 <?php
 include ('../uploads/conexion.php');
 
-$sql = "SELECT * FROM productos";
-$resultado = $conn->query($sql);
+$buscar = isset($_GET['buscar']) ? mysqli_real_escape_string($conn, $_GET['buscar']) : '';
+
+if ($buscar !== '') {
+    $sql = "SELECT * FROM productos WHERE nombre_producto LIKE '%$buscar%' OR descripcion LIKE '%$buscar%'";
+} else {
+    $sql = "SELECT * FROM productos";
+}
+$resultado = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -10,11 +16,15 @@ $resultado = $conn->query($sql);
 <head>
   <meta charset="UTF-8">
   <title>Catálogo - Nachitos</title>
-  <link rel="stylesheet" href="../css/estilos.css">
+  <link rel="stylesheet" href="/nachitos/css/estilos.css">
 </head>
 <body>
   <?php include ('../includes/header.php'); ?>
   <main class="catalogo-contenedor">
+    <?php if ($buscar !== ''): ?>
+      <h3>Resultados para "<?= htmlspecialchars($buscar) ?>"</h3>
+    <?php endif; ?>
+
     <h1>Nuestros Productos</h1>
     <div class="productos-grid">
       <?php while ($productos = $resultado->fetch_assoc()): ?>

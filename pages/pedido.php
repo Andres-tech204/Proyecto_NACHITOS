@@ -92,7 +92,7 @@ include('../includes/header.php');
 <head>
     <meta charset="UTF-8">
     <title>Pedido - Nachitos</title>
-    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="/nachitos/css/estilos.css">
 </head>
 <body>
     <h1>Realiza tu Pedido</h1>

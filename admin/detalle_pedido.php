@@ -40,12 +40,11 @@ $total = 0;
     <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-    <h1>Detalle del Pedido #<?= $pedido['id_pedido'] ?></h1>
-    <p><strong>Cliente:</strong> <?= htmlspecialchars($pedido['nombre']) ?></p>
-    <p><strong>Correo:</strong> <?= htmlspecialchars($pedido['correo']) ?></p>
-    <p><strong>Teléfono:</strong> <?= htmlspecialchars($pedido['telefono']) ?></p>
+    <h1>Detalle del Pedido #<?= $pedido['pedido_id'] ?></h1>
+    <p><strong>Cliente:</strong> <pre><?= htmlspecialchars($pedido['descripcion_cliente']) ?></pre></p>
     <p><strong>Estado:</strong> <?= ucfirst($pedido['estado']) ?></p>
     <p><strong>Fecha del pedido:</strong> <?= $pedido['fecha_pedido'] ?></p>
+
 
     <h2>Productos</h2>
     <table border="1" cellpadding="10">

@@ -58,16 +58,6 @@ for ($i = 0; $i < count($productos); $i++) {
     $precio = $row['precio'];
     $total += $precio * $cant;
 
-    $ins = $conn->prepare(
-      "INSERT INTO detalle_pedido
-         (pedido_id, producto_id, cantidad, precio_unitario)
-       VALUES (?, ?, ?, ?)"
-    );
-    $ins->bind_param("iiid", $pedido_id, $pid, $cant, $precio);
-    if (!$ins->execute()) {
-        echo "Error al registrar el detalle del pedido.";
-        exit;
-    }
 }
 
 $u = $conn->prepare(
@@ -99,15 +89,11 @@ for ($i = 0; $i < count($productos); $i++) {
         exit;
     }
     $row = $res->fetch_assoc();
-    $nombre = $row['nombre_producto'];
+    $nombreProd = $row['nombre_producto'];
     $precio = $row['precio'];
     $subtotal = $precio * $cant;
 
     $cuerpoCli .= "- $nombre: $cant x $" . number_format($precio, 0, ',', '.') . " = $" . number_format($subtotal, 0, ',', '.') . "\n";
-
-   
-    $total += $subtotal;
-
     
     $ins = $conn->prepare(
       "INSERT INTO detalle_pedido
@@ -122,8 +108,88 @@ for ($i = 0; $i < count($productos); $i++) {
 }
 
 $cuerpoCli .= "\nTotal: $" . number_format($total, 0, ',', '.') . "\n\n$descripcion_cliente";
-enviarCorreo($correo, "Confirmacion de tu pedido en Nachitos", $cuerpoCli);
-enviarCorreo("admin@nachitos.cl", "Nuevo pedido #$pedido_id", $cuerpoCli);
+require_once 'PHPMailer/PHPMailer.php';
+require_once 'PHPMailer/SMTP.php';
+require_once 'PHPMailer/Exception.php';
+require_once 'mail_config.php';
+require_once '../librerias/dompdf/autoload.inc.php';
+
+use Dompdf\Dompdf;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$html = "
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url('file:///C:/xampp/htdocs/nachitos/imagenes/LogoNachitos.png');
+    background-size: 300px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
+<body>
+  <h1 style='text-align:center;'>Comprobante de Pedido</h1>
+  <hr>
+  <p><strong>Nombre:</strong> $nombre</p>
+  <p><strong>Email:</strong> $correo</p>
+  <p><strong>Teléfono:</strong> $telefono</p>
+  <p><strong>Mensaje:</strong> $mensajeC</p>
+  <h3>Detalle:</h3>
+  <ul>
+</body>
+";
+
+for ($i = 0; $i < count($productos); $i++) {
+    $pid  = intval($productos[$i]);
+    $cant = intval($cantidades[$i]);
+
+    $s = $conn->prepare("SELECT nombre_producto, precio FROM productos WHERE producto_id = ?");
+    $s->bind_param("i", $pid);
+    $s->execute();
+    $res = $s->get_result();
+    $row = $res->fetch_assoc();
+
+    $nombreProd = $row['nombre_producto'];
+    $precio     = $row['precio'];
+    $subtotal   = $precio * $cant;
+
+    $html .= "<li>$nombreProd — $cant x $" . number_format($precio, 0, ',', '.') . " = $" . number_format($subtotal, 0, ',', '.') . "</li>";
+}
+
+$html .= "</ul><p><strong>Total:</strong> $" . number_format($total, 0, ',', '.') . "</p></body></html>";
+
+$dompdf = new Dompdf();
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->render();
+$pdf_output = $dompdf->output();
+
+$mail = new PHPMailer(true);
+
+try {
+    $mail->isSMTP();
+    $mail->Host = $smtp_host;
+    $mail->SMTPAuth = true;
+    $mail->Username = $smtp_user;
+    $mail->Password = $smtp_pass;
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+
+    $mail->setFrom($smtp_user, 'Nachitos');
+    $mail->addAddress($correo, $nombre); // Cliente
+    $mail->addAddress('admin@nachitos.cl', 'Administrador'); // Admin
+
+    $mail->Subject = 'Comprobante de pedido - Nachitos';
+    $mail->Body    = "Hola $nombre,\n\nAdjuntamos tu comprobante de pedido.\n\nSaludos de parte del equipo Nachitos.";
+    $mail->addStringAttachment($pdf_output, "Comprobante_Pedido_$pedido_id.pdf");
+
+    $mail->send();
+} catch (Exception $e) {
+    echo "Error al enviar comprobante: {$mail->ErrorInfo}";
+}
+
 
 unset($_SESSION["pedido"]);
 

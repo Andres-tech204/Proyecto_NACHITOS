@@ -3,10 +3,9 @@ include 'verificar_admin.php';
 
 include('../uploads/conexion.php');
 
-$sql = "SELECT p.pedido_id, p.fecha_pedido, p.estado, p.total, u.nombre
-        FROM pedidos p
-        JOIN usuarios u ON p.usuario_id = u.usuario_id
-        ORDER BY p.fecha_pedido DESC";
+$sql = "SELECT pedido_id, fecha_pedido, estado, total, descripcion_cliente
+        FROM pedidos
+        ORDER BY fecha_pedido DESC";
 
 $result = mysqli_query($conn, $sql);
 ?>
@@ -52,7 +51,7 @@ $result = mysqli_query($conn, $sql);
                         echo "<td>" . $row['fecha_pedido'] . "</td>";
                         echo "<td>" . $row['estado'] . "</td>";
                         echo "<td>" . number_format($row['total'], 2) . "</td>";
-                        echo "<td><a href='detalle_pedido.php?id=" . $row['pedido_id'] . "'>Ver Detalles</a></td>";
+                        echo "<td><pre><?= htmlspecialchars($row['descripcion_cliente']) ?></pre></td>";
                         echo "</tr>";
                     }
                 } else {

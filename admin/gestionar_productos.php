@@ -1,44 +1,60 @@
 <?php
-include '../uploads/conexion.php';
+require_once '../uploads/conexion.php';
+require_once 'verificar_admin.php';
 
-$mensaje = '';
-
-include 'verificar_admin.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-}
-
+$sql = "SELECT * FROM productos";
+$resultado = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Agregar Productos</title>
+    <title>Gestionar Productos</title>
+    <link rel="stylesheet" href="../css/estilos.css">
 </head>
 <body>
-    <h1>Agregar Nuevo Producto</h1>
 
-    <form action="" method="post" enctype="multipart/form-data">
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" required><br><br>
+<?php include '../includes/header.php'; ?>
 
-        <label>Descripcion:</label><br>
-        <textarea name= "descripcion" required></textarea></br><br>
+<div class="contenedor">
+    <h2>Gestion de Productos</h2>
+    <a href="crear_producto.php" class="boton">Agregar nuevo producto</a>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($row = mysqli_fetch_assoc($resultado)) : ?>
+                <tr>
+                    <td><?= $row['producto_id'] ?></td>
+                    <td><?= htmlspecialchars($row['nombre_producto']) ?></td>
+                    <td>$<?= number_format($row['precio'], 2) ?></td>
+                    <td><?= $row['stock'] ?></td>
+                    <td>
+                        <?php if (!empty($row['imagen_url'])): ?>
+                            <img src="../imagenes/<?= htmlspecialchars($row['imagen_url']) ?>" width="80">
+                        <?php else: ?>
+                            Sin Imagen
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="editar_producto.php?id=<?= $row['producto_id'] ?>">Editar</a> |
+                        <a href="eliminar_producto.php?id=<?= $row['producto_id'] ?>" onclick="return confirm('¿Eliminar este proudcto?');">Eliminar</a>
+                    </td>
+                </tr>
+                <?php endwhile; ?>
+        </tbody>
+    </table>
+</div>
 
-        <label>Precio:</label><br>
-        <input type="number" name="precio" step="0.01" required><br><br>
-
-        <label>Stock:</label><br>
-        <input type="number" name="stock" required><br><br>
-
-        <label>Imagen del producto:</label><br>
-        <input type="file" name="imagen" accept="imagenes/*" required><br><br>
-
-        <button type="submit">Guardar Producto</button>
-    </form>
-
-    <p><?= $mensaje ?></p>
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>
