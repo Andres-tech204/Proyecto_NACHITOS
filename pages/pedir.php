@@ -45,6 +45,5 @@ if (!isset($_SESSION["pedido"]) || count($_SESSION["pedido"]) === 0) {
     <?php endforeach; ?>
 
     <button type="submit">Enviar Pedido</button>
-</form>
-
 <?php include '../includes/footer.php'; ?>
+</form>

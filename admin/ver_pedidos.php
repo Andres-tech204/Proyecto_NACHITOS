@@ -3,6 +3,11 @@ include 'verificar_admin.php';
 
 include('../uploads/conexion.php');
 
+$reservados_query = mysqli_query($conn, "SELECT pedido_id FROM reservas");
+$reservados = [];
+while ($row = mysqli_fetch_assoc($reservados_query)) {
+    $reservados[] = $row['pedido_id'];
+}
 $sql = "SELECT pedido_id, fecha_pedido, estado, total, descripcion_cliente
         FROM pedidos
         ORDER BY fecha_pedido DESC";
@@ -16,7 +21,8 @@ $result = mysqli_query($conn, $sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Pedidos</title>
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+
 </head>
 <body>
     <header>
@@ -45,15 +51,29 @@ $result = mysqli_query($conn, $sql);
                 <?php
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) {
+                        $pedido_id = $row['pedido_id'];
+
                         echo "<tr>";
-                        echo "<td>" . $row['pedido_id'] . "</td>";
-                        echo "<td>" . $row['nombre'] . "</td>";
+                        echo "<td>" . $pedido_id . "</td>";
+                        echo "<td><pre>" . htmlspecialchars($row['descripcion_cliente']) . "</pre></td>";
                         echo "<td>" . $row['fecha_pedido'] . "</td>";
                         echo "<td>" . $row['estado'] . "</td>";
-                        echo "<td>" . number_format($row['total'], 2) . "</td>";
-                        echo "<td><pre><?= htmlspecialchars($row['descripcion_cliente']) ?></pre></td>";
+                        echo "<td>" . number_format($row['total'], 2, ',', '.') . "</td>";
+
+                        echo "<td>";
+                        echo "<a href='detalle_pedido.php?id=" . $pedido_id . "'>Ver Detalles</a><br>";
+
+                        if (!in_array($pedido_id, $reservados)) {
+                            echo "<a href='convertir_reserva.php?pedido_id={$pedido_id}'>Convertir en Reserva</a>";
+                        } else {
+                            echo "<em>Ya reservado</em>";
+                        }
+
+                        echo "</td>";
                         echo "</tr>";
                     }
+
+
                 } else {
                     echo "<tr><td colspan='6'>No hay pedidos registrados.</td></tr>";
                 }

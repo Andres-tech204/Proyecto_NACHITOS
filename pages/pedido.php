@@ -1,7 +1,9 @@
 <?php
 session_start();
 include('../uploads/conexion.php');
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 if (!isset($_SESSION["pedido"])) {
     $_SESSION["pedido"] = [];
 }
@@ -92,7 +94,7 @@ include('../includes/header.php');
 <head>
     <meta charset="UTF-8">
     <title>Pedido - Nachitos</title>
-    <link rel="stylesheet" href="/nachitos/css/estilos.css">
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
     <h1>Realiza tu Pedido</h1>

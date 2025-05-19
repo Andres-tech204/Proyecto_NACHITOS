@@ -20,7 +20,7 @@ $html = "
             body {
                 font-family: Arial, sans-serif;
                 position: relative;
-                background-image: url('C:/xampp/htdocs/nachitos/imagenes/LogoNachitos.png');
+                background-image: url('/htdocs/imagenes/LogoNachitos.png');
                 background-size: 300px;
                 background-position: center;
                 background-repeat: no-repeat;

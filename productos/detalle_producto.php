@@ -22,7 +22,7 @@ if ($producto = $resultado->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <title><?php echo $producto['nombre_producto']; ?> - Nachitos</title>
-    <link rel="stylesheet" href="/nachitos/css/estilos.css">
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
     <?php include ('../includes/header.php'); ?>

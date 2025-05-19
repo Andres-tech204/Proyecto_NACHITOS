@@ -16,7 +16,7 @@ $resultado = mysqli_query($conn, $sql);
 <head>
   <meta charset="UTF-8">
   <title>Catálogo - Nachitos</title>
-  <link rel="stylesheet" href="/nachitos/css/estilos.css">
+  <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
   <?php include ('../includes/header.php'); ?>
@@ -29,13 +29,11 @@ $resultado = mysqli_query($conn, $sql);
     <div class="productos-grid">
       <?php while ($productos = $resultado->fetch_assoc()): ?>
         <div class="productos-card">
-          <img src="../imagenes/<?php echo $productos['imagen_url']; ?>" alt="<?php echo $productos['nombre_producto']; ?>" class="img-producto">
+          <a href="../productos/detalle_producto.php?producto_id=<?php echo $productos['producto_id']; ?>">
+            <img src="../imagenes/<?php echo $productos['imagen_url']; ?>" alt="<?php echo $productos['nombre_producto']; ?>" class="img-producto">
+          </a>
           <h2><?php echo $productos['nombre_producto']; ?></h2>
           <p>$<?php echo number_format($productos['precio'], 0, ',', '.'); ?> CLP</p>
-
-      
-          <a href="../productos/detalle_producto.php?producto_id=<?php echo $productos['producto_id']; ?>" class="boton-reservar">Ver más</a>
-
        
           <a href="../pages/pedido.php?producto_id=<?php echo $productos['producto_id']; ?>" class="boton-reservar" style="margin-top: 5px; display: inline-block;">Pedir</a>
 

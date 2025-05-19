@@ -119,16 +119,24 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 $html = "
+<html>
+<head>
 <style>
   body {
     font-family: Arial, sans-serif;
-    background-image: url('file:///C:/xampp/htdocs/nachitos/imagenes/LogoNachitos.png');
+    background-image: url('../imagenes/LogoNachitos.png');
     background-size: 300px;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
   }
+  ul {
+  padding-left: 20px;
+  page-break-inside: avoid;
+  }
+
 </style>
+</head>
 <body>
   <h1 style='text-align:center;'>Comprobante de Pedido</h1>
   <hr>
@@ -138,8 +146,8 @@ $html = "
   <p><strong>Mensaje:</strong> $mensajeC</p>
   <h3>Detalle:</h3>
   <ul>
-</body>
 ";
+
 
 for ($i = 0; $i < count($productos); $i++) {
     $pid  = intval($productos[$i]);
@@ -158,7 +166,12 @@ for ($i = 0; $i < count($productos); $i++) {
     $html .= "<li>$nombreProd — $cant x $" . number_format($precio, 0, ',', '.') . " = $" . number_format($subtotal, 0, ',', '.') . "</li>";
 }
 
-$html .= "</ul><p><strong>Total:</strong> $" . number_format($total, 0, ',', '.') . "</p></body></html>";
+$html .= "</ul><p><strong>Total:</strong> $" . number_format($total, 0, ',', '.') . "</p>
+
+<h1> Nos pondremos en contacto contigo enseguida!, gracias por elegir Nachitos para tu cotizacion! </h1>
+</body>
+</html>";
+
 
 $dompdf = new Dompdf();
 $dompdf->loadHtml($html);

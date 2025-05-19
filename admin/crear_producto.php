@@ -9,8 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $descripcion = mysqli_real_escape_string($conn, $_POST['descripcion']);
     $precio = floatval($_POST['precio']);
     $stock = intval($_POST['stock']);
+    $categoria_id = intval($_POST['categoria_id']);
+
 
     $errores = [];
+    if ($categoria_id < 1) {
+    $errores[] = "Debes seleccionar una categoría válida.";
+    }
+
 
     if (empty($nombre) || empty($descripcion)) {
         $errores[] = "Nombre y descripción son obligatorios.";
@@ -33,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!empty($_FILES['imagen']['name'])) {
-        $imagen_nombre = basename($_FILES['imagen']['name']);
+        $imagen_nombre = uniqid() . "_" . preg_replace("/[^a-zA-Z0-9.]/", "", basename($_FILES['imagen']['name']));
         $extension = strtolower(pathinfo($imagen_nombre, PATHINFO_EXTENSION));
         $peso = $_FILES['imagen']['size'];
         $permitidas = ['jpg', 'jpeg', 'png', 'gif'];
@@ -52,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errores) === 0) {
         $ruta_imagen = '../imagenes/' . $imagen_nombre;
         if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta_imagen)) {
-            $sql = "INSERT INTO productos (nombre_producto, descripcion, precio, stock, imagen_url)
-                    VALUES ('$nombre', '$descripcion', $precio, $stock, '$imagen_nombre')";
+            $sql = "INSERT INTO productos (nombre_producto, descripcion, precio, stock, imagen_url, categoria_id)
+                    VALUES ('$nombre', '$descripcion', $precio, $stock, '$imagen_nombre', $categoria_id)";
             if (mysqli_query($conn, $sql)) {
                 header("Location: gestionar_productos.php?exito=1");
                 exit;
@@ -86,6 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php if (!empty($mensaje)): ?>
     <p style="color:red;"><?= htmlspecialchars($mensaje) ?></p>
   <?php endif; ?>
+  <?php
+        $sql_cat = "SELECT categoria_id, nombre_categoria FROM categorias";
+        $res_cat = mysqli_query($conn, $sql_cat);
+    ?>
+
 
   <form action="crear_producto.php" method="POST" enctype="multipart/form-data">
     <label>Nombre:</label><br>
@@ -99,6 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <label>Stock:</label><br>
     <input type="number" name="stock" min="1" required><br><br>
+    <label>Categoría:</label><br>
+    <select name="categoria_id" required>
+        <option value="">-- Selecciona una categoría --</option>
+        <?php while($fila = mysqli_fetch_assoc($res_cat)): ?>
+            <option value="<?= $fila['categoria_id'] ?>"><?= htmlspecialchars($fila['nombre_categoria']) ?></option>
+        <?php endwhile; ?>
+    </select><br><br>
+
 
     <label>Imagen:</label><br>
     <input type="file" name="imagen" accept="image/*" required><br><br>
