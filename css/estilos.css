@@ -461,3 +461,55 @@ body.dark-mode::before {
   z-index: -1;
   pointer-events: none;
 }
+
+.btn,
+.BotonConfirmacion {
+  position: relative;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+  background: none;
+  border: 2px solid #f86e40;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Efecto especial solo para BotonConfirmacion */
+.BotonConfirmacion {
+  background: linear-gradient(#f86e40 0 0) no-repeat calc(200% - var(--p, 0%))
+    100% / 200% var(--p, 0.2em);
+  transition: 0.3s var(--t, 0s),
+    background-position 0.3s calc(0.3s - var(--t, 0s)), all 0.3s ease;
+}
+
+.BotonConfirmacion:hover {
+  --p: 100%;
+  --t: 0.3s;
+  color: #fff;
+}
+
+/* Hover para todos los botones base */
+.btn:hover {
+  background: #f86e40;
+  color: #fff;
+  border-color: #f86e40;
+}
+
+/* Inputs y textarea adaptables a modo claro/oscuro */
+.formulario-contacto input,
+.formulario-contacto textarea {
+  background: transparent;
+  color: inherit;
+  border: 1px solid #ccc;
+}
+
+/* Solo inputs y textarea del formulario de contacto en modo oscuro */
+body.dark-mode .formulario-contacto input,
+body.dark-mode .formulario-contacto textarea {
+  border: 1px solid #888;
+  color: #fff;
+  background: transparent;
+}

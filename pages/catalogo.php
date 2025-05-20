@@ -35,21 +35,26 @@ $resultado = mysqli_query($conn, $sql);
           <h2><?php echo $productos['nombre_producto']; ?></h2>
           <p>$<?php echo number_format($productos['precio'], 0, ',', '.'); ?> CLP</p>
        
-          <a href="../pages/pedido.php?producto_id=<?php echo $productos['producto_id']; ?>" class="boton-reservar" style="margin-top: 5px; display: inline-block;">Pedir</a>
-
-  
+          <a href="../productos/detalle_producto.php?producto_id=<?php echo $productos['producto_id']; ?>">Ver Detalles</a>
+    
           <form action="../pages/pedido.php" method="POST" style="margin-top: 10px;">
             <input type="hidden" name="agregar" value="1">
             <input type="hidden" name="id" value="<?php echo $productos['producto_id']; ?>">
             <input type="hidden" name="nombre" value="<?php echo $productos['nombre_producto']; ?>">
             <input type="hidden" name="precio" value="<?php echo $productos['precio']; ?>">
             <input type="number" name="cantidad" value="1" min="1" style="width: 60px;">
-            <button type="submit">Agregar a Cotización</button>
+            <button class="BotonConfirmacion" type="submit">
+              <i data-lucide="zap"></i>
+              Agregar a Cotización
+            </button>
           </form>
         </div>
       <?php endwhile; ?>
     </div>
   </main>
   <?php include ("../includes/footer.php"); ?>
+  <script 
+  src="https://unpkg.com/lucide@latest"></script>
+  <script src="script.js"></script>
 </body>
 </html>
