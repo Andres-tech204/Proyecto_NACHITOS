@@ -44,7 +44,7 @@
     const consulta = this.value;
 
     if (consulta.length > 1) {
-      fetch('/ajax/buscador.php?buscar=' + encodeURIComponent(consulta))
+      fetch('/nachitos/ajax/buscador.php?buscar=' + encodeURIComponent(consulta))
         .then(res => res.text())
         .then(data => {
           document.getElementById('resultado-busqueda').innerHTML = data;

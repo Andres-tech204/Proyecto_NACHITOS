@@ -25,7 +25,7 @@
           referrerpolicy="no-referrer-when-downgrade">
         </iframe>
       </div>
-      <form style="display: flex; gap: 5px;">
+      <form action="/procesar_suscripcion.php" method="POST" class="form-newsletter" style="display: flex; gap: 5px;">
         <input type="email" placeholder="Tu correo" required style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
         <button type="submit" style="padding: 5px 10px; border-radius: 4px; background: #f86e40; color: white; border: none;">Suscribirse</button>
       </form>

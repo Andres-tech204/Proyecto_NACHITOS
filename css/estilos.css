@@ -278,7 +278,6 @@ form.buscador-global button:hover {
   background-color: #e65c00;
 }
 
-/* FOOTER */
 .footer-container1,
 .footer-container2 {
   width: 100%;
@@ -309,7 +308,6 @@ p.letrasFooter {
   position: relative;
 }
 
-/* FOOTER TEXTOS */
 footer.footerSuperior,
 footer.footerInferior {
   color: white;
@@ -327,8 +325,8 @@ footer.footerInferior {
 
 body {
   position: relative;
-  z-index: 0; /* Esto es importante */
-  background-color: transparent; /* Este es el cambio clave */
+  z-index: 0; 
+  background-color: transparent; 
 }
 
 body::before {
@@ -422,13 +420,11 @@ body::before {
   }
 }
 
-/* Modo oscuro */
 body.dark-mode {
   background-color: #121212;
   color: #f1f1f1;
 }
 
-/* Texto y enlaces naranjas en dark mode */
 body.dark-mode a {
   color: #f86e40;
 }
@@ -439,7 +435,6 @@ body.dark-mode button {
   border: none;
 }
 
-/* Estilo básico para enlaces normales */
 a {
   color: #f86e40;
   text-decoration: none;
@@ -477,7 +472,6 @@ body.dark-mode::before {
   transition: all 0.3s ease;
 }
 
-/* Efecto especial solo para BotonConfirmacion */
 .BotonConfirmacion {
   background: linear-gradient(#f86e40 0 0) no-repeat calc(200% - var(--p, 0%))
     100% / 200% var(--p, 0.2em);
@@ -491,14 +485,12 @@ body.dark-mode::before {
   color: #fff;
 }
 
-/* Hover para todos los botones base */
 .btn:hover {
   background: #f86e40;
   color: #fff;
   border-color: #f86e40;
 }
 
-/* Inputs y textarea adaptables a modo claro/oscuro */
 .formulario-contacto input,
 .formulario-contacto textarea {
   background: transparent;
@@ -506,10 +498,35 @@ body.dark-mode::before {
   border: 1px solid #ccc;
 }
 
-/* Solo inputs y textarea del formulario de contacto en modo oscuro */
 body.dark-mode .formulario-contacto input,
 body.dark-mode .formulario-contacto textarea {
   border: 1px solid #888;
   color: #fff;
   background: transparent;
+}
+
+#sugerencias {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  width: 100%;
+  display: none;
+}
+
+.sugerencias-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sugerencias-lista li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.sugerencias-lista li:hover {
+  background-color: #f0f0f0;
 }

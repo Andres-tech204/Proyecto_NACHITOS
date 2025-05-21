@@ -1,5 +1,5 @@
 <?php
-include 'verificar_admin.php';
+require_once 'verificar_admin.php';
 
 include('../uploads/conexion.php');
 

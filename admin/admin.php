@@ -35,6 +35,8 @@ while ($row = mysqli_fetch_assoc($res_pedidos_mes)) {
         <ul>
             <li><a href="gestionar_productos.php">Gestionar Productos</a></li>
             <li><a href="ver_pedidos.php">Ver Pedidos</a></li>
+            <li><a href="anuncio.php">Enviar Anuncio</a></li>
+            <li><a href="../login/logout.php">Cerrar Sesión</a></li>
         </ul>
     </div>
 
